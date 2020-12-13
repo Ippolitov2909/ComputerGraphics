@@ -60,7 +60,7 @@ int main()
 	glewInit();
 	glfwMakeContextCurrent(window);
 
-	GLfloat vertices[] = { // vertex attributes for a quad that fills the entire screen in Normalized Device Coordinates.
+	GLfloat vertices[] = {
 		// positions   // texCoords
 		-1.0f,  1.0f,  0.0f, 1.0f,
 		-1.0f, -1.0f,  0.0f, 0.0f,
@@ -107,10 +107,9 @@ int main()
 	Shader blinnShader("blinn_vertex.glsl", "blinn_fragment.glsl");
 	Shader outlineShader("outline_vertex.glsl", "outline_fragment.glsl");
 
-	unsigned int woodTexture = loadTexture("C:/resources/textures/wood.png");
-	GLuint wallTexture = loadTexture("C:/resources/textures/bricks2.jpg");
-	GLuint wallNormal = loadTexture("C:/resources/textures/bricks2_normal.jpg");
-	GLuint wallDepth = loadTexture("C:/resources/textures/bricks2_disp.jpg");
+	GLuint wallTexture = loadTexture("resources/textures/bricks2.jpg");
+	GLuint wallNormal = loadTexture("resources/textures/bricks2_normal.jpg");
+	GLuint wallDepth = loadTexture("resources/textures/bricks2_disp.jpg");
 
 
 	shader.use();
@@ -136,22 +135,16 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer, 0);
-	// create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+
 	unsigned int rbo;
 	glGenRenderbuffers(1, &rbo);
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT); // use a single renderbuffer object for both a depth AND stencil buffer.
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo); // now actually attach it
-	// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT);
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo);
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
-	/*unsigned int textureColorbuffer;
-	glGenTextures(1, &textureColorbuffer);
-	unsigned int rbo;
-	glGenRenderbuffers(1, &rbo);
-	unsigned int fbo = create_fbo(textureColorbuffer, rbo);*/
 
 
 	GLuint fbo1;
@@ -164,25 +157,22 @@ int main()
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 	glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, textureColorbuffer1, 0);
-	// create a renderbuffer object for depth and stencil attachment (we won't be sampling these)
+
 	unsigned int rbo1;
 	glGenRenderbuffers(1, &rbo1);
 	glBindRenderbuffer(GL_RENDERBUFFER, rbo1);
-	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT); // use a single renderbuffer object for both a depth AND stencil buffer.
-	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo1); // now actually attach it
-	// now that we actually created the framebuffer and added all attachments we want to check if it is actually complete now
+	glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH24_STENCIL8, SCR_WIDTH, SCR_HEIGHT); 
+	glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_RENDERBUFFER, rbo1);
 	if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
 		std::cout << "ERROR::FRAMEBUFFER:: Framebuffer is not complete!" << std::endl;
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
 
 
 
-	Model venus("C:/resources/models/venus/12328_Statue_v1_L2.obj");
-	//Model ogre("C:/resources/models/Ogre/OgreOBJ.obj");
-	Model constantine("C:/resources/models/constantine/Head_Constantine.obj");
-	Model david("C:/resources/models/david/12330_Statue_v1_L2.obj");
-	//Model duck("C:/resources/duck/Duck.obj");
-	Model helmet("C:/resources/models/helmet/18608_Attic_helmet_v1.obj");
+	Model venus("resources/models/venus/12328_Statue_v1_L2.obj");
+	Model constantine("resources/models/constantine/Head_Constantine.obj");
+	Model david("resources/models/david/12330_Statue_v1_L2.obj");
+	Model helmet("resources/models/helmet/18608_Attic_helmet_v1.obj");
 	glm::mat4 model_for_head = glm::scale(glm::rotate(glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), glm::vec3(0.0f, 1.0f, 0.0f)), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f)), glm::vec3(1.0f / 50, 1.0f / 50, 1.0f / 50));
 
 	glEnable(GL_STENCIL_TEST);
@@ -194,14 +184,14 @@ int main()
 		processInput(window);
 		glClearColor(0.1f, 0.0f, 0.3f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT | GL_STENCIL_BUFFER_BIT);
-		glStencilFunc(GL_ALWAYS, 1, 0xFF); // каждый фрагмент обновит трафаретный буфер
-		glStencilMask(0xFF); // включить запись в трафаретный буфер
+		glStencilFunc(GL_ALWAYS, 1, 0xFF); 
+		glStencilMask(0xFF);
 
 		glm::mat4 view = camera.GetViewMatrix();
 		glm::mat4 proj = glm::perspective(glm::radians(camera.Zoom), (float)SCR_WIDTH / (float)SCR_HEIGHT, 0.1f, 100.0f);
 
-		// render
-		// ------
+		
+		
 
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo);
 		glEnable(GL_DEPTH_TEST);
@@ -212,13 +202,9 @@ int main()
 		glUniformMatrix4fv(shader.get_location("view"), 1, GL_FALSE, glm::value_ptr(view));
 		glUniformMatrix4fv(shader.get_location("model"), 1, GL_FALSE, glm::value_ptr(model_for_head));
 		constantine.Draw(shader);
-		//glActiveTexture(GL_TEXTURE0);
-		//glBindTexture(GL_TEXTURE_2D, woodTexture);
-		//render_scene(shader);
 
 
 		glBindFramebuffer(GL_FRAMEBUFFER, fbo1);
-		//glDisable(GL_DEPTH_TEST);
 		glClearColor(1.0f, 1.0f, 1.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT);
 		screenshader.use();
@@ -228,7 +214,6 @@ int main()
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-		//glDisable(GL_DEPTH_TEST);
 		glClearColor(0.0f, 0.1f, 0.3f, 1.0f);
 		glEnable(GL_DEPTH_TEST);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -256,20 +241,6 @@ int main()
 		venus.Draw(shader);
 		
 
-		/*modelShader.use();
-		glUniformMatrix4fv(modelShader.get_location("projection"), 1, GL_FALSE, glm::value_ptr(proj));
-		glUniformMatrix4fv(modelShader.get_location("view"), 1, GL_FALSE, glm::value_ptr(view));
-		// set light uniforms
-		glUniform3f(modelShader.get_location("viewPos"), camera.Position.x, camera.Position.y, camera.Position.z);
-		glUniform3f(modelShader.get_location("lightPos"), lightPos.x, lightPos.y, lightPos.z);
-		//glm::mat4 model = glm::mat4(1.0f);
-		//model = glm::translate(model, glm::vec3(0.0f, 1.0f, 0.0));
-		//model = glm::rotate(model, glm::radians(-10.0f), glm::vec3(1.0f, 0.0f, 0.0f));
-		//model = glm::scale(model, glm::vec3(0.5f));
-		glUniformMatrix4fv(modelShader.get_location("model"), 1, GL_FALSE, glm::value_ptr(glm::scale(glm::rotate(glm::mat4(1.0f), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f)), glm::vec3(1.0f / 200, 1.0f / 200, 1.0f / 200))));
-
-		david.Draw(modelShader);*/
-
 		blinnShader.use();
 		glUniformMatrix4fv(blinnShader.get_location("proj"), 1, GL_FALSE, glm::value_ptr(proj));
 		glUniformMatrix4fv(blinnShader.get_location("view"), 1, GL_FALSE, glm::value_ptr(view));
@@ -283,7 +254,6 @@ int main()
 		glUniform1f(blinnShader.get_location("light.quadratic"), 0.01f);
 		glUniform1f(blinnShader.get_location("material.shininess"), 32.0f);
 		glUniform3f(blinnShader.get_location("viewPos"), camera.Position.x, camera.Position.y, camera.Position.z);
-		//glUniformMatrix4fv(shader.get_location("model"), 1, GL_FALSE, glm::value_ptr(glm::scale(glm::rotate(glm::translate(glm::mat4(1.0f), glm::vec3(-3.0f, -1.9f, -4.0f)), glm::radians(-90.0f), glm::vec3(1.0f, 0.0f, 0.0f)), glm::vec3(1.0f / 50, 1.0f / 50, 1.0f / 50))));
 
 		helmet.Draw(blinnShader);
 
@@ -584,7 +554,7 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	}
 
 	float xoffset = xpos - lastX;
-	float yoffset = lastY - ypos; // reversed since y-coordinates go from bottom to top
+	float yoffset = lastY - ypos;
 
 	lastX = xpos;
 	lastY = ypos;
@@ -592,8 +562,6 @@ void mouse_callback(GLFWwindow* window, double xpos, double ypos)
 	camera.ProcessMouseMovement(xoffset, yoffset);
 }
 
-// glfw: whenever the mouse scroll wheel scrolls, this callback is called
-// ----------------------------------------------------------------------
 void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
 {
 	camera.ProcessMouseScroll(yoffset);
@@ -620,7 +588,7 @@ unsigned int loadTexture(char const* path)
 		glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
 		glGenerateMipmap(GL_TEXTURE_2D);
 
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); // for this tutorial: use GL_CLAMP_TO_EDGE to prevent semi-transparent borders. Due to interpolation it takes texels from next repeat 
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT); 
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
