@@ -39,5 +39,9 @@
     <None Include="blinn_fragment.glsl" />
     <None Include="outline_vertex.glsl" />
     <None Include="outline_fragment.glsl" />
+    <None Include="depth_vertex.glsl" />
+    <None Include="depth_fragment.glsl" />
+    <None Include="v_debug_quad.glsl" />
+    <None Include="f_debug_quad.glsl" />
   </ItemGroup>
 </Project>

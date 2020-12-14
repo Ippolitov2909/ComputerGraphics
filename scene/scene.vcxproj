@@ -147,11 +147,14 @@
   <ItemGroup>
     <None Include="blinn_fragment.glsl" />
     <None Include="blinn_vertex.glsl" />
+    <None Include="depth_fragment.glsl" />
+    <None Include="depth_vertex.glsl" />
     <None Include="explode_fragment.glsl" />
     <None Include="explode_geometry.glsl" />
     <None Include="explode_vertex.glsl" />
     <None Include="fbo_fragment.glsl" />
     <None Include="fbo_vertex.glsl" />
+    <None Include="f_debug_quad.glsl" />
     <None Include="model_fragment.glsl" />
     <None Include="model_vertex.glsl" />
     <None Include="outline_fragment.glsl" />
@@ -164,6 +167,7 @@
     <None Include="skybox_vertex.glsl" />
     <None Include="sobel_fragment.glsl" />
     <None Include="sobel_vertex.glsl" />
+    <None Include="v_debug_quad.glsl" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

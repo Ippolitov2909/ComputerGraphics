@@ -48,7 +48,6 @@ private:
 	}
 	void processNode(aiNode* node, const aiScene* scene)
 	{
-        std::cout << "!" << std::endl;
 		// обработать все полигональные сетки в узле(если есть)
 		for (unsigned int i = 0; i < node->mNumMeshes; i++)
 		{

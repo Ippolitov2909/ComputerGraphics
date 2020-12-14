@@ -32,10 +32,6 @@ public:
 
     Mesh(std::vector<Vertex> vertices_, std::vector<unsigned int> indices_, std::vector<Texture> textures_) : vertices(vertices_), indices(indices_), textures(textures_) { 
         setupMesh();
-        std::cout << indices.size() << ' ' << textures.size() << std::endl;
-        //for (auto vert: vertices) {
-        //    std::cout << vert.Position.x << ' ' << vert.Position.y << ' ' << vert.Position.z << std::endl;
-        //}
     };
     void Draw(Shader shader)
     {

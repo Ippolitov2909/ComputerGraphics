@@ -30,7 +30,6 @@ public:
 	Shader(const std::string& vertexFile, const std::string& fragmentFile, const std::string& geometryFile = "") {
 		vertexShader = glCreateShader(GL_VERTEX_SHADER);
 		std::string vsh_src = src_from_file(vertexFile);
-		std::cout << vsh_src << std::endl;
 		const char* src = vsh_src.c_str();
 		glShaderSource(vertexShader, 1, &src, NULL);
 		glCompileShader(vertexShader);

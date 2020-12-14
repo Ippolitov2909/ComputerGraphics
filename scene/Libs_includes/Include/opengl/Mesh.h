@@ -32,10 +32,6 @@ public:
 
     Mesh(std::vector<Vertex> vertices_, std::vector<unsigned int> indices_, std::vector<Texture> textures_) : vertices(vertices_), indices(indices_), textures(textures_) { 
         setupMesh();
-        std::cout << indices.size() << ' ' << textures.size() << std::endl;
-        //for (auto vert: vertices) {
-        //    std::cout << vert.Position.x << ' ' << vert.Position.y << ' ' << vert.Position.z << std::endl;
-        //}
     };
     void Draw(Shader shader)
     {
@@ -43,8 +39,7 @@ public:
         unsigned int specularNr = 1;
         for (unsigned int i = 0; i < textures.size(); i++)
         {
-            glActiveTexture(GL_TEXTURE0 + i); // активируем текстурный блок, до привязки
-            // получаем номер текстуры
+            glActiveTexture(GL_TEXTURE0 + i); 
             std::stringstream ss;
             std::string number;
             std::string name = textures[i].type;
