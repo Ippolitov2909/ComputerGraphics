@@ -12,3 +12,4 @@
 6. Relief Parallax mapping - используется для рендера кирпича
 
 21.12.20 была внесена правка - я поменял Parallax Mapping на Relief Parallax Mapping в рендере кирпича.
+![](CG_CMC_scene.gif)
